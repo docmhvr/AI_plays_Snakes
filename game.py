@@ -96,7 +96,7 @@ class SnakeGame:
         return reward, game_over, self.score
     
     def is_collision(self, pt = None):
-        if pt in None:
+        if pt is None:
             pt = self.head
         # hits boundary
         if pt.x > self.w - BLOCK_SIZE or pt.x < 0 or pt.y > self.h - BLOCK_SIZE or pt.y < 0:

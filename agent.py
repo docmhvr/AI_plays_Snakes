@@ -4,6 +4,7 @@ import numpy as np
 from collections import deque
 from game import SnakeGame, Direction, Point
 from model import Linear_QNet, QTrainer
+from plot import plot
 
 MAX_MEM = 100_000
 BATCH_SIZE = 1000
@@ -64,8 +65,8 @@ class Agent:
 
         return np.array(state, dtype=int)
 
-    def remember(self, state, action, reward, next_state, over):
-        self.memory.append((state, action, reward, next_state, over)) # popleft if MAX_MEMORY is reached
+    def remember(self, state, action, reward, new_state, over):
+        self.memory.append((state, action, reward, new_state, over)) # popleft if MAX_MEMORY is reached
 
     def train_long_mem(self):
         if len(self.memory) > BATCH_SIZE:
@@ -77,12 +78,12 @@ class Agent:
         self.trainer.train_step(states, actions, rewards, next_states, overs)
         #for state, action, reward, nexrt_state, done in mini_sample:
 
-    def train_short_mem(self, state, action, reward, next_state, over):
-        self.trainer.train_step(state, action, reward, next_state, over)
+    def train_short_mem(self, state, action, reward, new_state, over):
+        self.trainer.train_step(state, action, reward, new_state, over)
 
     def get_action(self, state):
         # random moves: tradeoff exploration / exploitation
-        self.epsilon = 80 - self.n_games
+        self.epsilon = 80 - self.no_of_games
         final_move = [0,0,0]
         if random.randint(0, 200) < self.epsilon:
             move = random.randint(0, 2)
@@ -126,6 +127,12 @@ def train():
                 #agen model save and plot
             
             print("Game: ",agent.no_of_games,"Score: ",score,"Best: ",best_score)
+
+            plot_scores.append(score)
+            total_score +=score
+            mean_score = total_score/agent.no_of_games
+            plot_mean_scores.append(mean_score)
+            plot(plot_scores, plot_mean_scores)
                 
 
 
