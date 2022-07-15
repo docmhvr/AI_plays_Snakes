@@ -7,6 +7,8 @@ pygame.init()
 font = pygame.font.Font('arial.ttf', 25)
 #font = pygame.font.SysFont('arial', 25)
 
+# editin
+
 class Direction(Enum):
     RIGHT = 1
     LEFT = 2
@@ -34,7 +36,9 @@ class SnakeGame:
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')
         self.clock = pygame.time.Clock()
+        self.reset()
         
+    def reset(self):
         # init game state
         self.direction = Direction.RIGHT
         
@@ -46,6 +50,7 @@ class SnakeGame:
         self.score = 0
         self.food = None
         self._place_food()
+        self.frame_iteration = 0
         
     def _place_food(self):
         x = random.randint(0, (self.w-BLOCK_SIZE )//BLOCK_SIZE )*BLOCK_SIZE 
